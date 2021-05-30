@@ -56,6 +56,8 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hx711ScalesPostCalibrate_BLE/libraries/Wire/src}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hx711ScalesPostCalibrate_BLE/libraries/ESP32_BLE_Arduino/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hx711ScalesPostCalibrate_BLE/libraries/ESP32/src}&quot;"/>
                                     								
                                 </option>
                                 								
@@ -84,6 +86,8 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hx711ScalesPostCalibrate_BLE/libraries/Wire/src}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hx711ScalesPostCalibrate_BLE/libraries/ESP32_BLE_Arduino/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hx711ScalesPostCalibrate_BLE/libraries/ESP32/src}&quot;"/>
                                     								
                                 </option>
                                 								
@@ -112,6 +116,8 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hx711ScalesPostCalibrate_BLE/libraries/Wire/src}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hx711ScalesPostCalibrate_BLE/libraries/ESP32_BLE_Arduino/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hx711ScalesPostCalibrate_BLE/libraries/ESP32/src}&quot;"/>
                                     								
                                 </option>
                                 								

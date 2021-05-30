@@ -57,6 +57,11 @@
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/Adafruit_ST7735_and_ST7789_Library/1.7.1</locationURI>
 		</link>
 		<link>
+			<name>libraries/ESP32</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/libraries/ESP32</locationURI>
+		</link>
+		<link>
 			<name>libraries/ESP32_BLE_Arduino</name>
 			<type>2</type>
 			<location>/home/jonas/Arduino/libraries/ESP32_BLE_Arduino</location>

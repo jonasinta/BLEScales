@@ -52,7 +52,7 @@ environment/project/io.sloeber.core.toolChain.release.442497197/A.BUILD.PARTITIO
 environment/project/io.sloeber.core.toolChain.release.442497197/A.BUILD.PARTITIONS/value=default_ffat
 environment/project/io.sloeber.core.toolChain.release.442497197/A.BUILD.PATH/delimiter=\:
 environment/project/io.sloeber.core.toolChain.release.442497197/A.BUILD.PATH/operation=replace
-environment/project/io.sloeber.core.toolChain.release.442497197/A.BUILD.PATH/value=/home/jonas/workspace/esp32workspace/hx711ScalesPostCalibrate_BLE/Release
+environment/project/io.sloeber.core.toolChain.release.442497197/A.BUILD.PATH/value=/home/jonas/git/BLEScales/hx711ScalesPostCalibrate_BLE/Release
 environment/project/io.sloeber.core.toolChain.release.442497197/A.BUILD.PROJECT_NAME/delimiter=\:
 environment/project/io.sloeber.core.toolChain.release.442497197/A.BUILD.PROJECT_NAME/operation=replace
 environment/project/io.sloeber.core.toolChain.release.442497197/A.BUILD.PROJECT_NAME/value=${ProjName}
@@ -406,7 +406,7 @@ environment/project/io.sloeber.core.toolChain.release.442497197/JANTJE.COM_PORT/
 environment/project/io.sloeber.core.toolChain.release.442497197/JANTJE.COM_PORT/value=/dev/ttyUSB0
 environment/project/io.sloeber.core.toolChain.release.442497197/JANTJE.ECLIPSE_LOCATION/delimiter=\:
 environment/project/io.sloeber.core.toolChain.release.442497197/JANTJE.ECLIPSE_LOCATION/operation=replace
-environment/project/io.sloeber.core.toolChain.release.442497197/JANTJE.ECLIPSE_LOCATION/value=${eclipse_home}/////
+environment/project/io.sloeber.core.toolChain.release.442497197/JANTJE.ECLIPSE_LOCATION/value=${eclipse_home}//////////
 environment/project/io.sloeber.core.toolChain.release.442497197/JANTJE.EXTRA.ALL/delimiter=\:
 environment/project/io.sloeber.core.toolChain.release.442497197/JANTJE.EXTRA.ALL/operation=replace
 environment/project/io.sloeber.core.toolChain.release.442497197/JANTJE.EXTRA.ALL/value=
