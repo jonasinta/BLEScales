@@ -42,6 +42,16 @@
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/variants/esp32</locationURI>
 		</link>
 		<link>
+			<name>libraries/Adafruit-ST7735</name>
+			<type>2</type>
+			<location>/home/jonas/Arduino/libraries/Adafruit-ST7735</location>
+		</link>
+		<link>
+			<name>libraries/Adafruit-ST7735-Library-master</name>
+			<type>2</type>
+			<location>/home/jonas/Arduino/libraries/Adafruit-ST7735-Library-master</location>
+		</link>
+		<link>
 			<name>libraries/Adafruit_BusIO</name>
 			<type>2</type>
 			<location>/home/jonas/Arduino/libraries/Adafruit_BusIO</location>
@@ -50,11 +60,6 @@
 			<name>libraries/Adafruit_GFX_Library</name>
 			<type>2</type>
 			<location>/home/jonas/Arduino/libraries/Adafruit_GFX_Library</location>
-		</link>
-		<link>
-			<name>libraries/Adafruit_ST7735_and_ST7789_Library</name>
-			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/Adafruit_ST7735_and_ST7789_Library/1.7.1</locationURI>
 		</link>
 		<link>
 			<name>libraries/ESP32</name>

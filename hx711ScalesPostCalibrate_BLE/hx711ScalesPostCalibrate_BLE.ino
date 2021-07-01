@@ -46,7 +46,7 @@ HX711 scale;
 //check pins_arduino.h for MOSI and SCL pins- i changed them
 // Initialize Adafruit ST7789 TFT library
 Adafruit_ST7789 tft = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
-int fontScale = 3;
+int fontScale = 4;
 int fontHeight = fontScale * 8;
 
 //BLE setup includes and globals
@@ -61,14 +61,26 @@ int fontHeight = fontScale * 8;
 
 BLECharacteristic *pCharacteristic; //global for the characterisy=tic, that way i can access it in loop
 
-
+int LED = 2; // LED connected to pin 2
 float oldWeight = 0.000; // will use this variable to print over text in screen in backgound colour to blank text before next write
 
 float newWeight = 0; //
 int count = 0; //will use this for testing mqtt persistence
 
+class ServersCallbacks: public BLEServerCallbacks {
+	void onConnect(BLEServer* pServer){
+		digitalWrite(LED,HIGH);
+		Serial.println("*********");
+					Serial.print("Co nected");
+	}
+	void onDisconnect(BLEServer* pServer){
+		digitalWrite(LED,LOW);
+		Serial.println("*********");
+					Serial.println("Diss co nected: ");
+	}
 
 
+};
 
 class MyCallbacks: public BLECharacteristicCallbacks {
 	void onWrite(BLECharacteristic *pCharacteristic) {
@@ -76,7 +88,7 @@ class MyCallbacks: public BLECharacteristicCallbacks {
 		BLEUUID gotUUID = pCharacteristic->getUUID();
 		if (value.length() > 0) {
 			Serial.println("*********");
-			Serial.print("New value: ");
+						Serial.print("New value: ");
 			for (int i = 0; i < value.length(); i++)
 				Serial.print(value[i]);
 
@@ -95,28 +107,31 @@ class MyCallbacks: public BLECharacteristicCallbacks {
 
 	}
 };
-void connect() {
 
-}
 
 void messageReceived(String &topic, String &payload) {
 
 }
 void setup() {
+	//sleep setup//////////////////////////////////////////////////////////////////////////////////////
+	esp_sleep_enable_timer_wakeup(5*1000000);
 
+	pinMode(LED, OUTPUT);
+	digitalWrite(LED,LOW); //connected indicator
 	Serial.begin(115200);
-	//setup BLE setup BLE setup BLE setup BLE setup BLE
+	//setup BLE setup BLE setup BLE setup BLE setup BLE setup BLE setup BLE setup BLE setup BLE setup BLE
 	Serial.println("Starting BLE work!");
-
 	BLEDevice::init("SCALESGasBottleSCALES");
 	BLEServer *pServer = BLEDevice::createServer();
+	pServer->setCallbacks(new ServersCallbacks);
 	BLEService *pService = pServer->createService(SERVICE_UUID);
 	pCharacteristic = pService->createCharacteristic(
 	CHARACTERISTIC_UUID,
-			BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE);
+			BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_NOTIFY);
 	pCharacteristic->setNotifyProperty(true);
 	pCharacteristic->setValue("ThisIsAPlatformForBigGasBottles");
 	pCharacteristic->setCallbacks(new MyCallbacks());
+
 	pService->start();
 	BLEAdvertising *pAdvertising = pServer->getAdvertising(); // this still is working for backward compatibility
 	//BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
@@ -134,6 +149,7 @@ void setup() {
 	pAdvertising->start();
 	Serial.println(
 			"Characteristic defined! Now you can read it in your phone!");
+	//setup SCALE setup SCALE setup SCALE setup SCALE setup SCALE setup SCALE setup SCALE setup SCALE
 	Serial.println("HX711 scale initialise");
 
 	scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
@@ -144,28 +160,30 @@ void setup() {
 	}
 	else
 		Serial.println("HX711 scale is in state of;ERROR ERROR ERROR ERROR");
-	//imnitialise lcd;
+	//setup LCD setup LCD  setup LCD  setup LCD  setup LCD  setup LCD  setup LCD  setup LCD  setup LCD
+
 	Serial.print(F("Hello! ST77xx TFT Test"));
 
 	// if the display has CS pin try with SPI_MODE0
 	tft.init(240, 240, SPI_MODE2);    // Init ST7789 display 240x240 pixel
 
 	// if the screen is flipped, remove this command
-	tft.setRotation(2);
+	tft.setRotation(3);
 
 	Serial.println(F(". Initialized"));
 
 	tft.setTextWrap(true);
 	tft.fillScreen(ST77XX_BLACK);
-	tft.setCursor(0, 0);
+	tft.setCursor(0, 30);
 	tft.setTextColor(ST77XX_RED);
 	tft.setTextSize(fontScale);
 	tft.println("Weight in Kg");
 }
 
 void loop() {
-
-
+	tft.fillScreen(ST77XX_BLACK);
+	oldWeight = (scale.read());
+//	scale. power_down();
 	Serial.print("ReadingRaw: ");
 	Serial.print(oldWeight, 3); //scale.get_units() returns a float
 	Serial.print(" raw\n"); //You can change this to kg but you'll need to refactor the calibration_factor
@@ -178,13 +196,14 @@ void loop() {
 	tft.setCursor(0, cursorY + 10);
 	tft.print(oldWeight); // print text in background colour to blank text (instaed of blanking entire screen)
 	//oldWeight = (scale.read_average(50));
-	oldWeight = (scale.read());
+
 	tft.setTextColor(ST77XX_RED); // set text colour back to red- finished blanking old text
 	tft.setCursor(0, cursorY + 10);
 	tft.print(oldWeight);
 	tft.setCursor(0, 0);
 
 	tft.println("Weight in Kg");
+//	tft.enableDisplay(false);
 	//count ++;
 
 	//plotWith(Serial,  oldWeight);
@@ -194,5 +213,9 @@ void loop() {
 		dtostrf( oldWeight, 6, 3, tempString);
 		pCharacteristic->setValue(tempString);
 			pCharacteristic->notify();
-		delay(3000);
+			delay(6000);
+
+
+
+		//esp_deep_sleep_start();
 }
