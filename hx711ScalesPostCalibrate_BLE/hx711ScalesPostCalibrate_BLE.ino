@@ -49,6 +49,9 @@ Adafruit_ST7789 tft = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 int fontScale = 4;
 int fontHeight = fontScale * 8;
 
+//circularBuffer include
+#include <CircularBuffer.h>
+
 //BLE setup includes and globals
 #include <BLEDevice.h>
 #include <BLEUtils.h>
@@ -64,14 +67,19 @@ BLECharacteristic *pCharacteristic; //global for the characterisy=tic, that way 
 int LED = 2; // LED connected to pin 2
 float oldWeight = 0.000; // will use this variable to print over text in screen in backgound colour to blank text before next write
 
-float newWeight = 0; //
-int count = 0; //will use this for testing mqtt persistence
-
+float newWeight = 0.000; //
+long  count = 0; //will use this for testing mqtt persistence
+struct DataSend {
+	long count;
+	float adcRaw;
+};
+RTC_DATA_ATTR CircularBuffer<DataSend,425> data2send; //425/4per minute = 28minutes of storage
 class ServersCallbacks: public BLEServerCallbacks {
 	void onConnect(BLEServer* pServer){
 		digitalWrite(LED,HIGH);
 		Serial.println("*********");
 					Serial.print("Co nected");
+
 	}
 	void onDisconnect(BLEServer* pServer){
 		digitalWrite(LED,LOW);
