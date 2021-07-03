@@ -52,6 +52,8 @@ int fontHeight = fontScale * 8;
 //circularBuffer include
 #include <CircularBuffer.h>
 
+#include <ArduinoJson.h>
+
 //BLE setup includes and globals
 #include <BLEDevice.h>
 #include <BLEUtils.h>
@@ -119,6 +121,7 @@ class MyCallbacks: public BLECharacteristicCallbacks {
 
 void printBuffer(void)
 {
+	char tempString[32];
 	while (data2send.size()) {
 		tft.fillScreen(ST77XX_WHITE);
 		struct DataSend temp = data2send.pop();
@@ -126,6 +129,17 @@ void printBuffer(void)
 		tft.println(temp.count);
 		tft.setCursor(0, 60 + 20+32);
 		tft.println(temp.adcRaw);
+		//jsonify
+		StaticJsonDocument<32> doc;
+
+		doc["count"] = temp.count;
+		doc["adcvalue"] = temp.adcRaw;
+
+		serializeJson(doc, Serial);
+		Serial.println("");
+		serializeJson(doc, tempString);
+		pCharacteristic->setValue(tempString);
+					pCharacteristic->notify();
 		delay(100);
 								}//closew while
 	delay(2000);

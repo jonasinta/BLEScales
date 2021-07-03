@@ -62,6 +62,8 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hx711ScalesPostCalibrate_BLE/libraries/Adafruit-ST7735}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hx711ScalesPostCalibrate_BLE/libraries/CircularBuffer}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hx711ScalesPostCalibrate_BLE/libraries/ArduinoJson/src}&quot;"/>
                                     								
                                 </option>
                                 								
@@ -96,6 +98,8 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hx711ScalesPostCalibrate_BLE/libraries/Adafruit-ST7735}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hx711ScalesPostCalibrate_BLE/libraries/CircularBuffer}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hx711ScalesPostCalibrate_BLE/libraries/ArduinoJson/src}&quot;"/>
                                     								
                                 </option>
                                 								
@@ -130,6 +134,8 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hx711ScalesPostCalibrate_BLE/libraries/Adafruit-ST7735}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hx711ScalesPostCalibrate_BLE/libraries/CircularBuffer}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/hx711ScalesPostCalibrate_BLE/libraries/ArduinoJson/src}&quot;"/>
                                     								
                                 </option>
                                 								
