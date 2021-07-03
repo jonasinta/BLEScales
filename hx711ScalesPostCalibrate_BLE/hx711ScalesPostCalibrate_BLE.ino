@@ -72,7 +72,8 @@ long  count = 0; //will use this for testing mqtt persistence
 struct DataSend {
 	long count;
 	float adcRaw;
-};
+}boing;
+
 RTC_DATA_ATTR CircularBuffer<DataSend,425> data2send; //425/4per minute = 28minutes of storage
 class ServersCallbacks: public BLEServerCallbacks {
 	void onConnect(BLEServer* pServer){
@@ -116,7 +117,19 @@ class MyCallbacks: public BLECharacteristicCallbacks {
 	}
 };
 
-
+void printBuffer(void)
+{
+	while (data2send.size()) {
+		tft.fillScreen(ST77XX_WHITE);
+		struct DataSend temp = data2send.pop();
+		tft.setCursor(0, 60 + 20);
+		tft.println(temp.count);
+		tft.setCursor(0, 60 + 20+32);
+		tft.println(temp.adcRaw);
+		delay(100);
+								}//closew while
+	delay(2000);
+	}
 void messageReceived(String &topic, String &payload) {
 
 }
@@ -191,6 +204,10 @@ void setup() {
 void loop() {
 	tft.fillScreen(ST77XX_BLACK);
 	oldWeight = (scale.read());
+boing.adcRaw = oldWeight;
+boing.count = count;
+count ++;
+data2send.unshift(boing);
 //	scale. power_down();
 	Serial.print("ReadingRaw: ");
 	Serial.print(oldWeight, 3); //scale.get_units() returns a float
@@ -221,9 +238,17 @@ void loop() {
 		dtostrf( oldWeight, 6, 3, tempString);
 		pCharacteristic->setValue(tempString);
 			pCharacteristic->notify();
-			delay(6000);
+			delay(1000);
 
-
+//test buuffer
+			if (data2send.size()>= 10){
+				Serial.print("buffer has 10 elements");
+printBuffer();
+Serial.print("buffer has %d elements  ");
+Serial.println(data2send.size());
+			}//close iff
 
 		//esp_deep_sleep_start();
 }
+
+
