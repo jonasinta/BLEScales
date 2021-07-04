@@ -160,11 +160,9 @@ void setup() {
 	BLEServer *pServer = BLEDevice::createServer();
 	pServer->setCallbacks(new ServersCallbacks);
 	BLEService *pService = pServer->createService(SERVICE_UUID);
-	pCharacteristic = pService->createCharacteristic(
-	CHARACTERISTIC_UUID,
-			BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_NOTIFY);
+	pCharacteristic = pService->createCharacteristic(CHARACTERISTIC_UUID,BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_NOTIFY);
 	pCharacteristic->setNotifyProperty(true);
-	pCharacteristic->setValue("ThisIsAPlatformForBigGasBottles");
+	pCharacteristic->setValue("um");
 	pCharacteristic->setCallbacks(new MyCallbacks());
 
 	pService->start();
@@ -173,16 +171,17 @@ void setup() {
 	pAdvertising->addServiceUUID(SERVICE_UUID);
 	pAdvertising->setScanResponse(true);
 	pAdvertising->setMinPreferred(0x06); // functions that help with iPhone connections issue
-	pAdvertising->setMaxPreferred(0x12);
-	pAdvertising->setMaxInterval(1000);
-	pAdvertising->setMinInterval(2000);
+	pAdvertising->setMinPreferred(0x12);
+	//pAdvertising->setMaxInterval(1000);
+	//pAdvertising->setMinInterval(2000);
+
 	//set some addvertisement nice data-------------------
-	 std::string manufacturerString = "IJ1968";
-	 BLEAdvertisementData advertisementData;
-	 advertisementData.setManufacturerData(manufacturerString);
+	//std::string manufacturerString = "IJ1968";
+	//BLEAdvertisementData advertisementData;
+	//advertisementData.setManufacturerData(manufacturerString);
 	//advertisementData.setManufacturerData("77");
 
-	 pAdvertising->setAdvertisementData(advertisementData);
+	//pAdvertising->setAdvertisementData(advertisementData);
 	 //set some addvertisement nice data-------------------------------------------------------
 
 	pAdvertising->start();
