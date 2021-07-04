@@ -403,10 +403,10 @@ environment/project/io.sloeber.core.toolChain.release.442497197/JANTJE.BOARD_NAM
 environment/project/io.sloeber.core.toolChain.release.442497197/JANTJE.BOARD_NAME/value=ESP32 Dev Module
 environment/project/io.sloeber.core.toolChain.release.442497197/JANTJE.COM_PORT/delimiter=\:
 environment/project/io.sloeber.core.toolChain.release.442497197/JANTJE.COM_PORT/operation=replace
-environment/project/io.sloeber.core.toolChain.release.442497197/JANTJE.COM_PORT/value=/dev/ttyUSB0
+environment/project/io.sloeber.core.toolChain.release.442497197/JANTJE.COM_PORT/value=/dev/ttyUSB1
 environment/project/io.sloeber.core.toolChain.release.442497197/JANTJE.ECLIPSE_LOCATION/delimiter=\:
 environment/project/io.sloeber.core.toolChain.release.442497197/JANTJE.ECLIPSE_LOCATION/operation=replace
-environment/project/io.sloeber.core.toolChain.release.442497197/JANTJE.ECLIPSE_LOCATION/value=${eclipse_home}////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+environment/project/io.sloeber.core.toolChain.release.442497197/JANTJE.ECLIPSE_LOCATION/value=${eclipse_home}///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 environment/project/io.sloeber.core.toolChain.release.442497197/JANTJE.EXTRA.ALL/delimiter=\:
 environment/project/io.sloeber.core.toolChain.release.442497197/JANTJE.EXTRA.ALL/operation=replace
 environment/project/io.sloeber.core.toolChain.release.442497197/JANTJE.EXTRA.ALL/value=

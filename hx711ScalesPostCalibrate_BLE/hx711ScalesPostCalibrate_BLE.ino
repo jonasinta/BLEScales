@@ -173,14 +173,18 @@ void setup() {
 	pAdvertising->addServiceUUID(SERVICE_UUID);
 	pAdvertising->setScanResponse(true);
 	pAdvertising->setMinPreferred(0x06); // functions that help with iPhone connections issue
-	pAdvertising->setMinPreferred(0x12);
-	/*//set some addvertisement nice data
-	 std::string manufacturerString = "ManuNM";
+	pAdvertising->setMaxPreferred(0x12);
+	pAdvertising->setMaxInterval(1000);
+	pAdvertising->setMinInterval(2000);
+	//set some addvertisement nice data-------------------
+	 std::string manufacturerString = "IJ1968";
 	 BLEAdvertisementData advertisementData;
 	 advertisementData.setManufacturerData(manufacturerString);
+	//advertisementData.setManufacturerData("77");
 
 	 pAdvertising->setAdvertisementData(advertisementData);
-	 */
+	 //set some addvertisement nice data-------------------------------------------------------
+
 	pAdvertising->start();
 	Serial.println(
 			"Characteristic defined! Now you can read it in your phone!");
@@ -243,10 +247,7 @@ data2send.unshift(boing);
 
 	tft.println("Weight in Kg");
 //	tft.enableDisplay(false);
-	//count ++;
 
-	//plotWith(Serial,  oldWeight);
-	// delay(1500);
 	char tempString[12];
 		//itoa(count, tempString, 10);
 		dtostrf( oldWeight, 6, 3, tempString);
