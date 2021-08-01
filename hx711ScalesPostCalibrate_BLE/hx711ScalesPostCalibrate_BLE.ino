@@ -66,30 +66,34 @@ int fontHeight = fontScale * 8;
 
 BLECharacteristic *pCharacteristic; //global for the characterisy=tic, that way i can access it in loop
 
+//time stuff library import and globals....
+#include <ESP32Time.h>
+ESP32Time rtc;
+long long epoch=0;
+
 int LED = 2; // LED connected to pin 2
 float oldWeight = 0.000; // will use this variable to print over text in screen in backgound colour to blank text before next write
 
 float newWeight = 0.000; //
-long  count = 0; //will use this for testing mqtt persistence
+long count = 0; //will use this for testing mqtt persistence
 struct DataSend {
 	long count;
 	float adcRaw;
-}boing;
+} boing;
 
-RTC_DATA_ATTR CircularBuffer<DataSend,425> data2send; //425/4per minute = 28minutes of storage
+RTC_DATA_ATTR CircularBuffer<DataSend, 425> data2send; //425/4per minute = 28minutes of storage
 class ServersCallbacks: public BLEServerCallbacks {
-	void onConnect(BLEServer* pServer){
-		digitalWrite(LED,HIGH);
+	void onConnect(BLEServer *pServer) {
+		digitalWrite(LED, HIGH);
 		Serial.println("*********");
-					Serial.print("Co nected");
+		Serial.print("Co nected");
 
 	}
-	void onDisconnect(BLEServer* pServer){
-		digitalWrite(LED,LOW);
+	void onDisconnect(BLEServer *pServer) {
+		digitalWrite(LED, LOW);
 		Serial.println("*********");
-					Serial.println("Diss co nected: ");
+		Serial.println("Diss co nected: ");
 	}
-
 
 };
 
@@ -99,12 +103,23 @@ class MyCallbacks: public BLECharacteristicCallbacks {
 		BLEUUID gotUUID = pCharacteristic->getUUID();
 		if (value.length() > 0) {
 			Serial.println("*********");
-						Serial.print("New value: ");
+			Serial.print("New value: ");
 			for (int i = 0; i < value.length(); i++)
 				Serial.print(value[i]);
 
 			Serial.println();
 			Serial.println("*********");
+			String doing = value.c_str();
+			int length = doing.length();
+			doing.remove((length - 3), 3); // trim mS from the epoch
+			epoch = doing.toInt();
+
+			Serial.println((long) epoch, 10);
+			if (epoch < 2524611600L && epoch > 946688400L) {
+				Serial.println("lets see the epoch value: ");
+				rtc.setTime(epoch, 0);
+
+			} //close if check
 		}
 		if (gotUUID.bitSize() > 0) {
 			std::string valueUUID = gotUUID.toString();
@@ -112,22 +127,26 @@ class MyCallbacks: public BLECharacteristicCallbacks {
 				Serial.print(valueUUID[i]);
 
 		}
+		if (value == "giveTime") {
+			Serial.println("the time now is");
+			Serial.println(rtc.getDateTime());
+		}
 	}
 	void onRead(BLECharacteristic *pCharacteristic) {
-	   	 Serial.println("++++++++Read from client has just happened+++++++++++++++++++");
+		Serial.println(
+				"++++++++Read from client has just happened+++++++++++++++++++");
 
 	}
 };
 
-void printBuffer(void)
-{
+void printBuffer(void) {
 	char tempString[32];
 	while (data2send.size()) {
 		tft.fillScreen(ST77XX_WHITE);
 		struct DataSend temp = data2send.pop();
 		tft.setCursor(0, 60 + 20);
 		tft.println(temp.count);
-		tft.setCursor(0, 60 + 20+32);
+		tft.setCursor(0, 60 + 20 + 32);
 		tft.println(temp.adcRaw);
 		//jsonify
 		StaticJsonDocument<32> doc;
@@ -139,20 +158,20 @@ void printBuffer(void)
 		Serial.println("");
 		serializeJson(doc, tempString);
 		pCharacteristic->setValue(tempString);
-					pCharacteristic->notify();
+		pCharacteristic->notify();
 		delay(100);
-								}//closew while
+	} //closew while
 	delay(2000);
-	}
+}
 void messageReceived(String &topic, String &payload) {
 
 }
 void setup() {
 	//sleep setup//////////////////////////////////////////////////////////////////////////////////////
-	esp_sleep_enable_timer_wakeup(5*1000000);
+	esp_sleep_enable_timer_wakeup(5 * 1000000);
 
 	pinMode(LED, OUTPUT);
-	digitalWrite(LED,LOW); //connected indicator
+	digitalWrite(LED, LOW); //connected indicator
 	Serial.begin(115200);
 	//setup BLE setup BLE setup BLE setup BLE setup BLE setup BLE setup BLE setup BLE setup BLE setup BLE
 	Serial.println("Starting BLE work!");
@@ -160,7 +179,9 @@ void setup() {
 	BLEServer *pServer = BLEDevice::createServer();
 	pServer->setCallbacks(new ServersCallbacks);
 	BLEService *pService = pServer->createService(SERVICE_UUID);
-	pCharacteristic = pService->createCharacteristic(CHARACTERISTIC_UUID,BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_NOTIFY);
+	pCharacteristic = pService->createCharacteristic(CHARACTERISTIC_UUID,
+			BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE
+					| BLECharacteristic::PROPERTY_NOTIFY);
 	pCharacteristic->setNotifyProperty(true);
 	pCharacteristic->setValue("um");
 	pCharacteristic->setCallbacks(new MyCallbacks());
@@ -182,7 +203,7 @@ void setup() {
 	//advertisementData.setManufacturerData("77");
 
 	//pAdvertising->setAdvertisementData(advertisementData);
-	 //set some addvertisement nice data-------------------------------------------------------
+	//set some addvertisement nice data-------------------------------------------------------
 
 	pAdvertising->start();
 	Serial.println(
@@ -195,8 +216,7 @@ void setup() {
 	scale.tare(); //Assuming there is no weight on the scale at start up, reset the scale to 0
 	if (scale.is_ready()) {
 		Serial.println("HX711 scale is rrrrrrrreadeeeee");
-	}
-	else
+	} else
 		Serial.println("HX711 scale is in state of;ERROR ERROR ERROR ERROR");
 	//setup LCD setup LCD  setup LCD  setup LCD  setup LCD  setup LCD  setup LCD  setup LCD  setup LCD
 
@@ -221,10 +241,10 @@ void setup() {
 void loop() {
 	tft.fillScreen(ST77XX_BLACK);
 	oldWeight = (scale.read());
-boing.adcRaw = oldWeight;
-boing.count = count;
-count ++;
-data2send.unshift(boing);
+	boing.adcRaw = oldWeight;
+	boing.count = count;
+	count++;
+	data2send.unshift(boing);
 //	scale. power_down();
 	Serial.print("ReadingRaw: ");
 	Serial.print(oldWeight, 3); //scale.get_units() returns a float
@@ -247,22 +267,21 @@ data2send.unshift(boing);
 	tft.println("Weight in Kg");
 //	tft.enableDisplay(false);
 
-	char tempString[12];
-		//itoa(count, tempString, 10);
-		dtostrf( oldWeight, 6, 3, tempString);
-		pCharacteristic->setValue(tempString);
-			pCharacteristic->notify();
-			delay(1000);
+	/*char tempString[12];
+	 //itoa(count, tempString, 10);
+	 dtostrf( oldWeight, 6, 3, tempString);
+	 pCharacteristic->setValue(tempString);
+	 pCharacteristic->notify();*/
+	delay(1000);
 
 //test buuffer
-			if (data2send.size()>= 10){
-				Serial.print("buffer has 10 elements");
-printBuffer();
-Serial.print("buffer has %d elements  ");
-Serial.println(data2send.size());
-			}//close iff
+	if (data2send.size() >= 10) {
+		Serial.print("buffer has 10 elements");
+		printBuffer();
+		Serial.print("buffer has %d elements  ");
+		Serial.println(data2send.size());
+	} //close iff
 
-		//esp_deep_sleep_start();
+	//esp_deep_sleep_start();
 }
-
 

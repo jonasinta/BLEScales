@@ -77,6 +77,11 @@
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/libraries/ESP32</locationURI>
 		</link>
 		<link>
+			<name>libraries/ESP32Time</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/ESP32Time/1.0.3</locationURI>
+		</link>
+		<link>
 			<name>libraries/ESP32_BLE_Arduino</name>
 			<type>2</type>
 			<location>/home/jonas/Arduino/libraries/ESP32_BLE_Arduino</location>
@@ -90,6 +95,11 @@
 			<name>libraries/SPI</name>
 			<type>2</type>
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/libraries/SPI</locationURI>
+		</link>
+		<link>
+			<name>libraries/Time</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/Time/1.6.1</locationURI>
 		</link>
 		<link>
 			<name>libraries/Wire</name>
