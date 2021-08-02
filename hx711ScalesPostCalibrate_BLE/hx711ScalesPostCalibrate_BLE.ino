@@ -71,6 +71,8 @@ BLECharacteristic *pCharacteristic; //global for the characterisy=tic, that way 
 ESP32Time rtc;
 long long epoch=0;
 
+#define looptimedelay 5000
+
 int LED = 2; // LED connected to pin 2
 float oldWeight = 0.000; // will use this variable to print over text in screen in backgound colour to blank text before next write
 
@@ -272,7 +274,14 @@ void loop() {
 	 dtostrf( oldWeight, 6, 3, tempString);
 	 pCharacteristic->setValue(tempString);
 	 pCharacteristic->notify();*/
-	delay(1000);
+	delay(looptimedelay);
+
+	//print time to serial port=======================================
+	Serial.print("every ");
+		Serial.print(looptimedelay);
+		Serial.println(" seconds the time is");
+		Serial.println(rtc.getDateTime());
+		//==============================================================
 
 //test buuffer
 	if (data2send.size() >= 10) {
