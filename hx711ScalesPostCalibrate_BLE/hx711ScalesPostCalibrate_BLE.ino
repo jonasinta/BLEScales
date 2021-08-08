@@ -69,9 +69,10 @@ BLECharacteristic *pCharacteristic; //global for the characterisy=tic, that way 
 //time stuff library import and globals....
 #include <ESP32Time.h>
 ESP32Time rtc;
-long long epoch=0;
+long long epoch = 0;
 
 #define looptimedelay 5000
+bool isConnected = false;
 
 int LED = 2; // LED connected to pin 2
 float oldWeight = 0.000; // will use this variable to print over text in screen in backgound colour to blank text before next write
@@ -79,19 +80,21 @@ float oldWeight = 0.000; // will use this variable to print over text in screen 
 float newWeight = 0.000; //
 long count = 0; //will use this for testing mqtt persistence
 struct DataSend {
-	long count;
+	unsigned long epoch;
 	float adcRaw;
 } boing;
 
 RTC_DATA_ATTR CircularBuffer<DataSend, 425> data2send; //425/4per minute = 28minutes of storage
 class ServersCallbacks: public BLEServerCallbacks {
 	void onConnect(BLEServer *pServer) {
+		isConnected = true;
 		digitalWrite(LED, HIGH);
 		Serial.println("*********");
 		Serial.print("Co nected");
 
 	}
 	void onDisconnect(BLEServer *pServer) {
+		isConnected = false;
 		digitalWrite(LED, LOW);
 		Serial.println("*********");
 		Serial.println("Diss co nected: ");
@@ -142,29 +145,33 @@ class MyCallbacks: public BLECharacteristicCallbacks {
 };
 
 void printBuffer(void) {
-	char tempString[32];
+	char tempString[40];
 	while (data2send.size()) {
 		tft.fillScreen(ST77XX_WHITE);
 		struct DataSend temp = data2send.pop();
 		tft.setCursor(0, 60 + 20);
-		tft.println(temp.count);
+		tft.println(temp.epoch);
 		tft.setCursor(0, 60 + 20 + 32);
 		tft.println(temp.adcRaw);
 		//jsonify
+
 		StaticJsonDocument<32> doc;
 
-		doc["count"] = temp.count;
+		doc["count"] = temp.epoch;
 		doc["adcvalue"] = temp.adcRaw;
 
-		serializeJson(doc, Serial);
-		Serial.println("");
 		serializeJson(doc, tempString);
+		//serializeJson(doc, Serial);
+		Serial.println(tempString);
+		Serial.println("");
+
 		pCharacteristic->setValue(tempString);
 		pCharacteristic->notify();
-		delay(100);
+		delay(50);
 	} //closew while
 	delay(2000);
-}
+} //close void printBuffer(void)
+
 void messageReceived(String &topic, String &payload) {
 
 }
@@ -244,9 +251,12 @@ void loop() {
 	tft.fillScreen(ST77XX_BLACK);
 	oldWeight = (scale.read());
 	boing.adcRaw = oldWeight;
-	boing.count = count;
-	count++;
-	data2send.unshift(boing);
+	boing.epoch = rtc.getEpoch();
+	//do not store data if epoch has not been yet set- i.e less than 1.5 billion equivalent of july 14 2017
+	if (epoch > 1500000000) {
+		data2send.unshift(boing); //unshift will add data to the ringbuffer (boing)
+	}
+
 //	scale. power_down();
 	Serial.print("ReadingRaw: ");
 	Serial.print(oldWeight, 3); //scale.get_units() returns a float
@@ -278,18 +288,24 @@ void loop() {
 
 	//print time to serial port=======================================
 	Serial.print("every ");
-		Serial.print(looptimedelay);
-		Serial.println(" seconds the time is");
-		Serial.println(rtc.getDateTime());
-		//==============================================================
+	Serial.print(looptimedelay);
+	Serial.println(" seconds the time is");
+	Serial.println(rtc.getDateTime());
+	//==============================================================
 
-//test buuffer
-	if (data2send.size() >= 10) {
-		Serial.print("buffer has 10 elements");
-		printBuffer();
-		Serial.print("buffer has %d elements  ");
-		Serial.println(data2send.size());
-	} //close iff
+	/*
+	 //test buuffer
+	 if (data2send.size() >= 10) {
+	 Serial.print("buffer has 10 elements");
+	 printBuffer();
+	 Serial.print("buffer has %d elements  ");
+	 Serial.println(data2send.size());
+	 } //close iff
+	 */
+	// test connected
+	if (isConnected) {
+		printBuffer(); //routine to disharge buffer to BLE and client
+	}
 
 	//esp_deep_sleep_start();
 }
