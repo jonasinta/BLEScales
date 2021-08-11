@@ -6,7 +6,7 @@ TODO
 
 DONE split data transmission into a JSON structure
 
-DONE add timestamp into JSON structure
+DONE add timestamp into JSON structure.
 
 DONE get time epochs incorporated
 
